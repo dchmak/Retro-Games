@@ -3,14 +3,17 @@
 */
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManager : MonoBehaviour {
 
     public GameObject ballPrefab;
     public TextMeshProUGUI scoreUI;
+    public GameObject pauseUI;
 
     private int score1, score2;
+    private bool isPausing;
 
     private void Start() {
         ResetBall();
@@ -19,6 +22,11 @@ public class GameManager : MonoBehaviour {
 
     private void Update() {
         scoreUI.text = score1 + " : " + score2;
+
+        if (Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(KeyCode.Delete)) {
+            if (isPausing) Unpause();
+            else Pause();
+        }
     }
 
     private void DeleteBalls() {
@@ -52,5 +60,25 @@ public class GameManager : MonoBehaviour {
 
     public void AddScore2() {
         score2++;
+    }
+
+    public void Pause() {
+        Time.timeScale = 0f;
+        pauseUI.SetActive(true);
+        isPausing = true;
+    }
+
+    public void Unpause() {
+        Time.timeScale = 1f;
+        pauseUI.SetActive(false);
+        isPausing = false;
+    }
+
+    public void LoadScene(int index) {
+        SceneManager.LoadSceneAsync(index);
+    }
+
+    public void Quit() {
+        Application.Quit();
     }
 }

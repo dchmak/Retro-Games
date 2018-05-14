@@ -32,8 +32,8 @@ public class BallManager : MonoBehaviour {
         bound = new Vector2(dim.x - circle.radius, dim.y - circle.radius);
         //Debug.Log(bound);
 
-        //rb.velocity = Random.insideUnitCircle.normalized * speed;
-        rb.velocity = new Vector2(speed, 0);
+        rb.velocity = Random.insideUnitCircle.normalized * speed;
+        //rb.velocity = new Vector2(speed, 0);
     }
 
     private void Update() {
@@ -90,7 +90,7 @@ public class BallManager : MonoBehaviour {
                     dir = new Vector2(-1, Mathf.Sign(y) * Mathf.Tan(angle)).normalized;
                 }
 
-                Debug.Log(Mathf.Pow(comboMultiplier, combo));
+                //Debug.Log(Mathf.Pow(comboMultiplier, combo));
                 rb.velocity = dir * speed * Mathf.Pow(comboMultiplier, combo);
             } else if (horizontalManager != null) {
                 float x = contact[0].point.x - collision.transform.position.x;
@@ -103,7 +103,7 @@ public class BallManager : MonoBehaviour {
                     dir = new Vector2(Mathf.Sign(x) * Mathf.Tan(angle), 1).normalized;
                 }
 
-                Debug.Log(Mathf.Pow(comboMultiplier, combo));
+                //Debug.Log(Mathf.Pow(comboMultiplier, combo));
                 rb.velocity = dir * speed * Mathf.Pow(comboMultiplier, combo);
             } else Debug.LogWarning("Unknown collision!");
         } else {

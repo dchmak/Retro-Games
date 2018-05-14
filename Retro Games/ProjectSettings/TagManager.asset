@@ -44,15 +44,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 744478631
+    locked: 0
   - name: Paddles
     uniqueID: 3358648975
-    locked: 0
-  - name: Ball
-    uniqueID: 738018263
     locked: 0
   - name: Trail
     uniqueID: 2398606311
     locked: 0
-  - name: Background
-    uniqueID: 744478631
+  - name: Ball
+    uniqueID: 738018263
     locked: 0
