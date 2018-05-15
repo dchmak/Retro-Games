@@ -5,7 +5,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(EdgeCollider2D))]
-public class VerticalPlatformManager : MonoBehaviour {
+public class PongVerticalPlatformManager : MonoBehaviour {
 
     public int index;
     public float speed = 10f;

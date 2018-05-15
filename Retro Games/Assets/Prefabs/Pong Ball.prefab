@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114693388282928784}
   - component: {fileID: 96786812936612490}
   m_Layer: 0
-  m_Name: Ball
+  m_Name: Pong Ball
   m_TagString: Ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -229,7 +229,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 738018263
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b3fcbc68489a7eb4e948a80e66b7ba14, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

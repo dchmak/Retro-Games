@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Main.unity
     guid: 659dbf2a75e10e2408418e0a939b86b2
   - enabled: 1
-    path: Assets/Scenes/Pong.unity
+    path: Assets/Scenes/Pong+.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Breakout.unity
+    guid: 139dbee2685d89a4387d8750ec947e0b
   m_configObjects: {}

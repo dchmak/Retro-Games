@@ -5,7 +5,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(CircleCollider2D), typeof(Rigidbody2D), typeof(SpriteRenderer))]
-public class BallManager : MonoBehaviour {
+public class PongBallManager : MonoBehaviour {
 
     public float speed = 5f;
     [Range(1f, 5f)] public float comboMultiplier = 1.3f;
@@ -16,7 +16,7 @@ public class BallManager : MonoBehaviour {
 
     private Rigidbody2D rb;
     private CircleCollider2D circle;
-    private GameManager game;
+    private PongGameManager game;
     private SpriteRenderer sr;
     private Vector2 bound;
     private string lastHit;
@@ -25,7 +25,7 @@ public class BallManager : MonoBehaviour {
     private void Start() {
         rb = GetComponent<Rigidbody2D>();
         circle = GetComponent<CircleCollider2D>();
-        game = FindObjectOfType<GameManager>();
+        game = FindObjectOfType<PongGameManager>();
         sr = GetComponent<SpriteRenderer>();
 
         Vector3 dim = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
@@ -76,8 +76,8 @@ public class BallManager : MonoBehaviour {
         int len = collision.GetContacts(contact);
 
         if (len < maxLen) {
-            VerticalPlatformManager verticalManager = collision.gameObject.GetComponent<VerticalPlatformManager>();
-            HorizontalPlatformManager horizontalManager = collision.gameObject.GetComponent<HorizontalPlatformManager>();
+            PongVerticalPlatformManager verticalManager = collision.gameObject.GetComponent<PongVerticalPlatformManager>();
+            PongHorizontalPlatformManager horizontalManager = collision.gameObject.GetComponent<PongHorizontalPlatformManager>();
 
             if (verticalManager != null) {
                 float y = contact[0].point.y - collision.transform.position.y;
