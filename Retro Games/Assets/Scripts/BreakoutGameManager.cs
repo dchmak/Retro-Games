@@ -2,42 +2,70 @@
 * Created by Daniel Mak
 */
 
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 
 public class BreakoutGameManager : MonoBehaviour {
 
+    [Range(1, 10)] public int maxLives = 3;
+
     public GameObject ballPrefab;
     public Vector2 ballSpawn;
-
+    
     public GameObject pauseUI;
+    public TextMeshProUGUI livesText;
 
     public GameObject brickPrefab;
     public Texture2D[] levels;
 
+    private int lives, currentLevel;
     private bool isPausing;
     private float brickHeight, brickWidth, maxBrickCol, maxBrickRow;
     private Vector3 brickSize, bound;
+    private List<GameObject> bricks;
 
     private void Start() {
+        lives = maxLives;
+        currentLevel = 0;
+
         brickSize = brickPrefab.GetComponent<SpriteRenderer>().bounds.size;
         brickWidth = brickSize.x;
         brickHeight = brickSize.y;
         bound = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
         maxBrickRow = bound.x * 2 / brickWidth;
         maxBrickCol = bound.y / 2 / brickHeight;
-        Debug.Log(maxBrickCol);
+        //Debug.Log(maxBrickCol);
 
-        GenerateLevel(levels[0]);
+        bricks = new List<GameObject>();
+
+        GenerateLevel(levels[currentLevel]);
 
         ResetBall();
     }
 
     private void Update() {
-        if (Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(KeyCode.Delete)) {
+        if (Input.GetKeyUp(KeyCode.Escape)) {
             if (isPausing) Unpause();
             else Pause();
+        }
+    }
+
+    private void LateUpdate() {
+        livesText.text = "x " + lives.ToString();
+
+        if (bricks.Count == 0) {
+            //Debug.Log("No brick left!");
+            currentLevel++;
+            if (currentLevel < levels.Length) ResetLevel();
+        }
+
+        if (lives <= 0) {
+            lives = maxLives;
+            currentLevel = 0;
+            ResetLevel();
         }
     }
 
@@ -50,10 +78,15 @@ public class BreakoutGameManager : MonoBehaviour {
     }
 
     private void SpawnBall() {
-        Instantiate(ballPrefab, ballSpawn, Quaternion.identity);
+        GameObject ball = Instantiate(ballPrefab);
+
+        ball.transform.position = ballSpawn;
     }
 
     private void GenerateLevel(Texture2D level) {
+        GameObject brickHolder = new GameObject();
+        brickHolder.name = "Brick Holder";
+
         for (int y = 0; y < level.height && y < maxBrickCol; y++) {
             for (int x = 0; x < level.width && x < maxBrickRow; x++) {
                 Color pixelColor = level.GetPixel(x, y);
@@ -63,9 +96,20 @@ public class BreakoutGameManager : MonoBehaviour {
                     //Debug.Log(pos);
                     GameObject brick = Instantiate(brickPrefab, pos, Quaternion.identity);
                     brick.GetComponent<SpriteRenderer>().color = pixelColor;
+
+                    brick.transform.SetParent(brickHolder.transform);
+                    bricks.Add(brick);
                 }
             }
         }
+    }
+
+    private void ResetLevel() {
+        foreach (GameObject brick in bricks) {
+            Destroy(brick);
+        }
+        bricks.Clear();
+        GenerateLevel(levels[currentLevel]);
     }
 
     public void ResetBall() {
@@ -74,6 +118,15 @@ public class BreakoutGameManager : MonoBehaviour {
         //Debug.Log("Deleted. Spawning ball...");
         Invoke("SpawnBall", 2);
         //Debug.Log("Spawned.");
+    }
+
+    public void RemoveBrick(GameObject brickToRemove) {
+        bricks.Remove(brickToRemove);
+        Destroy(brickToRemove);
+    }
+
+    public void TakeDamage() {
+        lives--;
     }
 
     public void Pause() {

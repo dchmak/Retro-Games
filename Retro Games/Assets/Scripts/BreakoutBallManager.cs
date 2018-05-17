@@ -8,28 +8,28 @@ using UnityEngine;
 public class BreakoutBallManager : MonoBehaviour {
 
     public float speed = 5f;
-    [Range(1f, 5f)] public float comboMultiplier = 1.3f;
-    [Range(1, 10)] public int maxCombo = 5;
     [Range(0f, 90f)] public float maxAngle = 75f;
 
     private Rigidbody2D rb;
     private CircleCollider2D circle;
-    //private BreakGameManager game;
+    private BreakoutGameManager game;
     private SpriteRenderer sr;
+    private GameObject paddle;
     private Vector2 bound;
     private Vector3 velocity;
 
     private void Start() {
         rb = GetComponent<Rigidbody2D>();
         circle = GetComponent<CircleCollider2D>();
-        //game = FindObjectOfType<BreakoutGameManager>();
+        game = FindObjectOfType<BreakoutGameManager>();
         sr = GetComponent<SpriteRenderer>();
+        paddle = GameObject.FindGameObjectWithTag("Paddle");
 
         Vector3 dim = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
         bound = new Vector2(dim.x - circle.radius, dim.y - circle.radius);
         //Debug.Log(bound);
         
-        rb.velocity = new Vector2(0, -speed);
+        rb.velocity = new Vector2(Random.Range(-1, 1), -1).normalized * speed;
     }
 
     private void Update() {
@@ -44,6 +44,11 @@ public class BreakoutBallManager : MonoBehaviour {
 
         if (transform.position.y >= bound.y) {
             rb.velocity = new Vector2(rb.velocity.x, -rb.velocity.y);
+        }
+
+        if (transform.position.y <= -bound.y) {
+            game.TakeDamage();
+            game.ResetBall();
         }
     }
 
@@ -69,7 +74,8 @@ public class BreakoutBallManager : MonoBehaviour {
                 Vector3 normal = contacts[0].normal.normalized;
                 rb.velocity = Vector3.Reflect(velocity, normal);
 
-                Destroy(collision.gameObject);
+                //Destroy(collision.gameObject);
+                game.RemoveBrick(collision.gameObject);
             } else Debug.LogWarning("Unknown collision!");
         } else {
             Debug.LogWarning("Too much contact points!");
